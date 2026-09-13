@@ -17,19 +17,7 @@ module "gke" {
 
 `create_resources = false` is for credential-free validation. Consumers accept zonal Spot interruption.
 
-Before the first release, replace the repository metadata, module title, source URL, description, provider constraints, inputs, implementation, outputs, usage example, and Terratest assertions. The default module intentionally has no provider, resources, inputs, or outputs, so it can initialize, validate, and plan without cloud credentials or creating infrastructure.
-
-A derived module should be consumed using its released source and version:
-
-```hcl
-module "example" {
-  source = "github.com/defdevio/terraform-module-example?ref=v0.1.0"
-
-  # Replace with module-specific inputs.
-}
-```
-
-## Test
+## Testing
 
 The plan-only Terratest suite in `test` initializes and plans the module with OpenTofu. It does not create cloud resources or require provider credentials:
 
