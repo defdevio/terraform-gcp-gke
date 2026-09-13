@@ -1,0 +1,52 @@
+name: Quality
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Check generated documentation and repository tooling
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up OpenTofu
+        uses: opentofu/setup-opentofu@v2
+        with:
+          tofu_version: 1.11.4
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: test/go.mod
+          cache-dependency-path: test/go.sum
+
+      - name: Install repository check tools
+        run: |
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl -sSLo "$RUNNER_TEMP/terraform-docs.tar.gz" \
+            https://github.com/terraform-docs/terraform-docs/releases/download/v0.20.0/terraform-docs-v0.20.0-linux-amd64.tar.gz
+          tar -xzf "$RUNNER_TEMP/terraform-docs.tar.gz" -C "$RUNNER_TEMP/bin" terraform-docs
+          go install github.com/rhysd/actionlint/cmd/actionlint@v1.7.7
+          python -m pip install --disable-pip-version-check pre-commit
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - name: Check Terraform documentation is current
+        run: |
+          terraform-docs markdown table --output-file README.md --output-mode inject .
+          git diff --exit-code -- README.md
+
+      - name: Check workflow syntax
+        run: actionlint
+
+      - name: Run pre-commit checks
+        run: pre-commit run --all-files
