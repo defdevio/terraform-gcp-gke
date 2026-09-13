@@ -1,6 +1,6 @@
 output "cluster_name" {
   description = "GKE cluster name."
-  value       = var.cluster_name
+  value       = try(google_container_cluster.this[0].name, null)
 }
 output "cluster_endpoint" {
   description = "Cluster endpoint."
@@ -9,7 +9,7 @@ output "cluster_endpoint" {
 }
 output "cluster_location" {
   description = "Cluster zone."
-  value       = var.zone
+  value       = try(google_container_cluster.this[0].location, null)
 }
 output "node_pool_name" {
   description = "Spot node pool name."
