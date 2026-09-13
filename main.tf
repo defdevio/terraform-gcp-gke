@@ -5,6 +5,13 @@ resource "google_service_account" "node" {
   display_name = "OpenDepot GKE node service account"
 }
 
+resource "google_project_iam_member" "node_container_pull" {
+  count   = var.create_resources ? 1 : 0
+  project = var.project_id
+  role    = "roles/storage.objectViewer"
+  member  = "serviceAccount:${google_service_account.node[0].email}"
+}
+
 resource "google_container_cluster" "this" {
   count                    = var.create_resources ? 1 : 0
   name                     = var.cluster_name
@@ -47,6 +54,7 @@ resource "google_container_node_pool" "spot" {
     oauth_scopes = [
       "https://www.googleapis.com/auth/logging.write",
       "https://www.googleapis.com/auth/monitoring",
+      "https://www.googleapis.com/auth/devstorage.read_only",
     ]
     shielded_instance_config {
       enable_secure_boot          = true
