@@ -86,18 +86,18 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_access_token"></a> [access\_token](#input\_access\_token) | n/a | `string` | `null` | no |
-| <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | n/a | `string` | `"opendepot-demo"` | no |
-| <a name="input_create_resources"></a> [create\_resources](#input\_create\_resources) | n/a | `bool` | `true` | no |
-| <a name="input_network"></a> [network](#input\_network) | n/a | `string` | n/a | yes |
-| <a name="input_node_machine_type"></a> [node\_machine\_type](#input\_node\_machine\_type) | n/a | `string` | `"e2-standard-2"` | no |
-| <a name="input_node_service_account_id"></a> [node\_service\_account\_id](#input\_node\_service\_account\_id) | n/a | `string` | `"opendepot-gke-nodes"` | no |
-| <a name="input_pods_range_name"></a> [pods\_range\_name](#input\_pods\_range\_name) | n/a | `string` | `"gke-pods"` | no |
-| <a name="input_project_id"></a> [project\_id](#input\_project\_id) | n/a | `string` | n/a | yes |
-| <a name="input_region"></a> [region](#input\_region) | n/a | `string` | `"us-central1"` | no |
-| <a name="input_services_range_name"></a> [services\_range\_name](#input\_services\_range\_name) | n/a | `string` | `"gke-services"` | no |
-| <a name="input_subnetwork"></a> [subnetwork](#input\_subnetwork) | n/a | `string` | n/a | yes |
-| <a name="input_zone"></a> [zone](#input\_zone) | n/a | `string` | `"us-central1-a"` | no |
+| <a name="input_access_token"></a> [access\_token](#input\_access\_token) | Optional Google access token for authenticated operations. | `string` | `null` | no |
+| <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | Name of the GKE cluster. | `string` | `"opendepot-demo"` | no |
+| <a name="input_create_resources"></a> [create\_resources](#input\_create\_resources) | Whether to create the GKE cluster and node resources. Set false for credential-free validation. | `bool` | `true` | no |
+| <a name="input_network"></a> [network](#input\_network) | VPC network name or self-link for the cluster. | `string` | n/a | yes |
+| <a name="input_node_machine_type"></a> [node\_machine\_type](#input\_node\_machine\_type) | Compute Engine machine type for GKE nodes. | `string` | `"e2-standard-2"` | no |
+| <a name="input_node_service_account_id"></a> [node\_service\_account\_id](#input\_node\_service\_account\_id) | Account ID for the dedicated Google service account used by GKE nodes. | `string` | `"opendepot-gke-nodes"` | no |
+| <a name="input_pods_range_name"></a> [pods\_range\_name](#input\_pods\_range\_name) | Name of the existing secondary range used for GKE pods. | `string` | `"gke-pods"` | no |
+| <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Google Cloud project for the GKE cluster. | `string` | n/a | yes |
+| <a name="input_region"></a> [region](#input\_region) | Google Cloud region used by the provider. | `string` | `"us-central1"` | no |
+| <a name="input_services_range_name"></a> [services\_range\_name](#input\_services\_range\_name) | Name of the existing secondary range used for GKE services. | `string` | `"gke-services"` | no |
+| <a name="input_subnetwork"></a> [subnetwork](#input\_subnetwork) | Subnet name or self-link for the cluster. | `string` | n/a | yes |
+| <a name="input_zone"></a> [zone](#input\_zone) | Zonal location for the GKE cluster and node pool. | `string` | `"us-central1-a"` | no |
 
 ## Outputs
 

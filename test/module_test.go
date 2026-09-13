@@ -23,5 +23,8 @@ func TestModulePlan(t *testing.T) {
 	plan := terraform.ShowWithStruct(t, options)
 
 	assert.Empty(t, plan.ResourceChangesMap)
+	assert.Equal(t, "opendepot-demo", plan.RawPlan.OutputChanges["cluster_name"].After)
+	assert.Equal(t, "us-central1-a", plan.RawPlan.OutputChanges["cluster_location"].After)
+	assert.Equal(t, "opendepot-demo-spot", plan.RawPlan.OutputChanges["node_pool_name"].After)
 	assert.Equal(t, "opendepot-gke-nodes", plan.RawPlan.OutputChanges["node_service_account_id"].After)
 }

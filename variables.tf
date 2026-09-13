@@ -1,41 +1,70 @@
-variable "project_id" { type = string }
+variable "project_id" {
+  description = "Google Cloud project for the GKE cluster."
+  type        = string
+}
+
 variable "region" {
-  type    = string
-  default = "us-central1"
+  description = "Google Cloud region used by the provider."
+  type        = string
+  default     = "us-central1"
 }
+
 variable "zone" {
-  type    = string
-  default = "us-central1-a"
+  description = "Zonal location for the GKE cluster and node pool."
+  type        = string
+  default     = "us-central1-a"
 }
+
 variable "access_token" {
-  type      = string
-  default   = null
-  sensitive = true
+  description = "Optional Google access token for authenticated operations."
+  type        = string
+  default     = null
+  sensitive   = true
 }
+
 variable "create_resources" {
-  type    = bool
-  default = true
+  description = "Whether to create the GKE cluster and node resources. Set false for credential-free validation."
+  type        = bool
+  default     = true
 }
+
 variable "cluster_name" {
-  type    = string
-  default = "opendepot-demo"
+  description = "Name of the GKE cluster."
+  type        = string
+  default     = "opendepot-demo"
 }
-variable "network" { type = string }
-variable "subnetwork" { type = string }
+
+variable "network" {
+  description = "VPC network name or self-link for the cluster."
+  type        = string
+}
+
+variable "subnetwork" {
+  description = "Subnet name or self-link for the cluster."
+  type        = string
+}
+
 variable "pods_range_name" {
-  type    = string
-  default = "gke-pods"
+  description = "Name of the existing secondary range used for GKE pods."
+  type        = string
+  default     = "gke-pods"
 }
+
 variable "services_range_name" {
-  type    = string
-  default = "gke-services"
+  description = "Name of the existing secondary range used for GKE services."
+  type        = string
+  default     = "gke-services"
 }
+
 variable "node_machine_type" {
-  type    = string
-  default = "e2-standard-2"
+  description = "Compute Engine machine type for GKE nodes."
+  type        = string
+  default     = "e2-standard-2"
 }
+
 variable "node_service_account_id" {
-  type    = string
-  default = "opendepot-gke-nodes"
+  description = "Account ID for the dedicated Google service account used by GKE nodes."
+  type        = string
+  default     = "opendepot-gke-nodes"
 }
 
