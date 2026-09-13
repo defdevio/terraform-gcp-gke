@@ -1,3 +1,10 @@
+resource "google_service_account" "node" {
+  count        = var.create_resources ? 1 : 0
+  project      = var.project_id
+  account_id   = var.node_service_account_id
+  display_name = "OpenDepot GKE node service account"
+}
+
 resource "google_container_cluster" "this" {
   count                    = var.create_resources ? 1 : 0
   name                     = var.cluster_name
@@ -36,8 +43,11 @@ resource "google_container_node_pool" "spot" {
   node_config {
     machine_type    = var.node_machine_type
     spot            = true
-    service_account = var.node_service_account
-    oauth_scopes    = ["https://www.googleapis.com/auth/cloud-platform"]
+    service_account = google_service_account.node[0].email
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/logging.write",
+      "https://www.googleapis.com/auth/monitoring",
+    ]
     shielded_instance_config {
       enable_secure_boot          = true
       enable_integrity_monitoring = true

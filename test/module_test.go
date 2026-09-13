@@ -23,4 +23,5 @@ func TestModulePlan(t *testing.T) {
 	plan := terraform.ShowWithStruct(t, options)
 
 	assert.Empty(t, plan.ResourceChangesMap)
+	assert.Equal(t, "opendepot-gke-nodes", plan.RawPlan.OutputChanges["node_service_account_id"].After)
 }

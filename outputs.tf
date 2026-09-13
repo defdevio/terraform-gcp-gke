@@ -15,4 +15,12 @@ output "node_pool_name" {
   description = "Spot node pool name."
   value       = "${var.cluster_name}-spot"
 }
+output "node_service_account_email" {
+  description = "Dedicated Google service account used by GKE nodes."
+  value       = try(google_service_account.node[0].email, null)
+}
+output "node_service_account_id" {
+  description = "Account ID for the dedicated Google service account used by GKE nodes."
+  value       = var.node_service_account_id
+}
 

@@ -34,8 +34,8 @@ variable "node_machine_type" {
   type    = string
   default = "e2-standard-2"
 }
-variable "node_service_account" {
+variable "node_service_account_id" {
   type    = string
-  default = null
+  default = "opendepot-gke-nodes"
 }
 
