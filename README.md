@@ -1,0 +1,126 @@
+# terraform-gcp-gke
+
+Creates a small zonal GKE Standard cluster with one Spot node pool, bounded autoscaling, Workload Identity, and shielded nodes.
+
+## Usage
+
+Use the released module from a composition:
+
+```sh
+module "gke" {
+  source     = "github.com/defdevio/terraform-gcp-gke?ref=v0.1.0"
+  project_id = var.project_id
+  network    = module.network.network_name
+  subnetwork = module.network.subnetwork_name
+}
+```
+
+`create_resources = false` is for credential-free validation. Consumers accept zonal Spot interruption.
+
+Before the first release, replace the repository metadata, module title, source URL, description, provider constraints, inputs, implementation, outputs, usage example, and Terratest assertions. The default module intentionally has no provider, resources, inputs, or outputs, so it can initialize, validate, and plan without cloud credentials or creating infrastructure.
+
+A derived module should be consumed using its released source and version:
+
+```hcl
+module "example" {
+  source = "github.com/defdevio/terraform-module-example?ref=v0.1.0"
+
+  # Replace with module-specific inputs.
+}
+```
+
+## Test
+
+The plan-only Terratest suite in `test` initializes and plans the module with OpenTofu. It does not create cloud resources or require provider credentials:
+
+```sh
+cd test
+go test ./...
+```
+
+Pull requests run both the OpenTofu validation workflow and the Terratest workflow automatically.
+
+## Releases
+
+Releases are created automatically from conventional commits merged into `main`:
+
+- `feat:` creates a minor release
+- `fix:` creates a patch release
+- `feat!:` or `fix!:` creates a major release
+- `chore:` does not create a release
+
+Install `pre-commit` and `terraform-docs`, then enable the repository hooks:
+
+```sh
+pre-commit install
+pre-commit run --all-files
+```
+
+## Layout
+
+- `versions.tf`: OpenTofu/Terraform version and provider constraints
+- `variables.tf`: the consumer API
+- `main.tf`: module implementation
+- `outputs.tf`: stable consumer outputs
+- `test/module_test.go`: plan-only Terratest coverage
+- `.github/workflows/`: pull-request validation, Terratest, and release automation
+
+## Module Reference
+
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.0 |
+| <a name="requirement_google"></a> [google](#requirement\_google) | ~> 7.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_google"></a> [google](#provider\_google) | 7.46.1 |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [google_container_cluster.this](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_cluster) | resource |
+| [google_container_node_pool.spot](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_node_pool) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_access_token"></a> [access\_token](#input\_access\_token) | n/a | `string` | `null` | no |
+| <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | n/a | `string` | `"opendepot-demo"` | no |
+| <a name="input_create_resources"></a> [create\_resources](#input\_create\_resources) | n/a | `bool` | `true` | no |
+| <a name="input_network"></a> [network](#input\_network) | n/a | `string` | n/a | yes |
+| <a name="input_node_machine_type"></a> [node\_machine\_type](#input\_node\_machine\_type) | n/a | `string` | `"e2-standard-2"` | no |
+| <a name="input_node_service_account"></a> [node\_service\_account](#input\_node\_service\_account) | n/a | `string` | `null` | no |
+| <a name="input_pods_range_name"></a> [pods\_range\_name](#input\_pods\_range\_name) | n/a | `string` | `"gke-pods"` | no |
+| <a name="input_project_id"></a> [project\_id](#input\_project\_id) | n/a | `string` | n/a | yes |
+| <a name="input_region"></a> [region](#input\_region) | n/a | `string` | `"us-central1"` | no |
+| <a name="input_services_range_name"></a> [services\_range\_name](#input\_services\_range\_name) | n/a | `string` | `"gke-services"` | no |
+| <a name="input_subnetwork"></a> [subnetwork](#input\_subnetwork) | n/a | `string` | n/a | yes |
+| <a name="input_zone"></a> [zone](#input\_zone) | n/a | `string` | `"us-central1-a"` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_cluster_endpoint"></a> [cluster\_endpoint](#output\_cluster\_endpoint) | Cluster endpoint. |
+| <a name="output_cluster_location"></a> [cluster\_location](#output\_cluster\_location) | Cluster zone. |
+| <a name="output_cluster_name"></a> [cluster\_name](#output\_cluster\_name) | GKE cluster name. |
+| <a name="output_node_pool_name"></a> [node\_pool\_name](#output\_node\_pool\_name) | Spot node pool name. |
+<!-- END_TF_DOCS -->
+
+The section between `BEGIN_TF_DOCS` and `END_TF_DOCS` is generated by `terraform-docs` and must not be edited manually.
+
+## Contribution guidance
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local tools, the placeholder replacement map, testing, and commit conventions.

@@ -1,0 +1,36 @@
+name: Plan
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    name: Validate and plan OpenTofu configuration
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up OpenTofu
+        uses: opentofu/setup-opentofu@v2
+        with:
+          tofu_version: 1.11.4
+
+      - name: Check OpenTofu formatting
+        run: tofu fmt -check
+
+      - name: Initialize OpenTofu
+        run: tofu init -backend=false
+
+      - name: Validate OpenTofu configuration
+        run: tofu validate
+
+      - name: Plan OpenTofu configuration
+        run: tofu plan -input=false -var='project_id=opendepot-demo' -var='network=demo' -var='subnetwork=demo' -var='create_resources=false'

@@ -1,0 +1,38 @@
+name: Terratest
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+permissions:
+  contents: read
+
+jobs:
+  terratest:
+    name: Run plan-only Terratest
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    defaults:
+      run:
+        working-directory: test
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up OpenTofu
+        uses: opentofu/setup-opentofu@v2
+        with:
+          tofu_version: 1.11.4
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: test/go.mod
+          cache-dependency-path: test/go.sum
+
+      - name: Run Terratest
+        run: go test ./... -v -timeout 30m
